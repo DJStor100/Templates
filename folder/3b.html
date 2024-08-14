@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available (Time Slot Singular)</title>
+    <style>
+        .placeholder {
+            color: blue;
+            cursor: pointer;
+            border-bottom: 1px dotted blue;
+        }
+        #template {
+            margin-bottom: 20px;
+        }
+    </style>
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+</head>
+<body>
+    <h2>Available (Time Slot Singular)</h2>
+    <p id="template">
+        I've just checked my calendar for you and I'm delighted to say on <span class="placeholder date-placeholder" onclick="selectDate(this)">[Date]</span> we do have 1 time slot still available at the moment!
+        <br><br>
+	The time slot we have available is from // <span class="placeholder" onclick="editPlaceholder(this)">12pm-2pm</span> //
+	<br><br>
+        If you have any other questions about the show or would like to go ahead and book, please let me know.
+        <br><br>
+        Cheers,<br>
+        Dan
+  </p>
+    <button onclick="copyToClipboard()">Copy to Clipboard</button>
+    <br><br>
+    <a href="index.html"><button>Go to Index</button></a>
+    <div id="date-box"> <br><br></div>
+
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        function copyToClipboard() {
+            const range = document.createRange();
+            range.selectNode(document.getElementById('template'));
+            window.getSelection().removeAllRanges(); 
+            window.getSelection().addRange(range);
+            
+            try {
+                document.execCommand('copy');
+                alert('Template copied to clipboard!');
+            } catch (err) {
+                alert('Failed to copy template.');
+            }
+            
+            window.getSelection().removeAllRanges(); 
+        }
+
+        function getDateIn7Days() {
+            const today = new Date();
+            today.setDate(today.getDate() + 7);
+            const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+            return today.toLocaleDateString(undefined, options);
+        }
+
+        function editPlaceholder(element) {
+            // Get the current text of the placeholder
+            let currentText = element.innerText;
+
+            // Set the prompt box to be blank if the current text is the placeholder text
+            let newText = prompt('Enter the new text:', currentText === element.innerText ? '' : currentText);
+
+            // Update the placeholder text if newText is not null
+            if (newText !== null) {
+                element.innerText = newText;
+            }
+        }
+
+        function selectDate(element) {
+            // Create a temporary input element for Flatpickr
+            const tempInput = document.createElement('input');
+            tempInput.type = 'text';
+            tempInput.style.position = 'absolute';
+            tempInput.style.left = '-9999px';
+            document.body.appendChild(tempInput);
+
+            // Initialize Flatpickr on the temporary input
+            flatpickr(tempInput, {
+                dateFormat: 'Y-m-d', // Use a standard format for selection
+                onChange: function(selectedDates) {
+                    if (selectedDates.length > 0) {
+                        const date = selectedDates[0];
+                        const currentYear = new Date().getFullYear();
+                        const dateYear = date.getFullYear();
+
+                        let formattedDate;
+                        if (dateYear === currentYear) {
+                            // Format without the year
+                            formattedDate = date.toLocaleDateString('en-GB', {
+                                weekday: 'long',
+                                day: 'numeric',
+                                month: 'long'
+                            });
+                            // Add comma after the day
+                            formattedDate = formattedDate.replace(/(\w+), (\d{1,2}) ([A-Za-z]+)$/, '$1, $2 $3');
+                        } else {
+                            // Format with the year
+                            formattedDate = date.toLocaleDateString('en-GB', {
+                                weekday: 'long',
+                                day: 'numeric',
+                                month: 'long',
+                                year: 'numeric'
+                            });
+                            // Add comma after the day
+                            formattedDate = formattedDate.replace(/(\w+), (\d{1,2}) ([A-Za-z]+), (\d{4})$/, '$1, $2 $3, $4');
+                        }
+
+                        element.innerText = formattedDate;
+                    }
+                    // Remove the temporary input after selection
+                    document.body.removeChild(tempInput);
+                }
+            });
+
+            // Trigger the date picker
+            tempInput.click();
+        }
+
+        // Display the date 7 days from today
+        document.getElementById('date-box').innerText = 'The date 7 days from today is: ' + getDateIn7Days();
+    </script>
+</body>
+</html>

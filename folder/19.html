@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wedding Questionnaire</title>
+    <style>
+        .placeholder {
+            color: blue;
+            cursor: pointer;
+            border-bottom: 1px dotted blue;
+        }
+        #template {
+            margin-bottom: 20px;
+        }
+        #additional-price {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <h2>Wedding Questionnaire</h2>
+    <p id="template">
+        Also on the Email, <span class="placeholder" onclick="editPlaceholder(this)">I've Attached</span> what we call our 'Wedding Questionnaire' This asks things such as timings, first dance songs, ect. and is there to help us make your night special.
+        <br><br>
+	Please dont feel like you have to rush to fill this Wedding Questionnaire in, take your time, have a think and whenever you've finished just email it back and I'll attach it to your booking confirmation so we have it on the night.
+	<br><br>
+	To offer those times we would have to charge a higher fee (because we can only fit one party in), and we don't want to charge any more than we have to. 
+	<br><br>
+	I should also point out - Some people think we are asking you to plan the whole nights music...
+	<br><br>
+	THIS IS NOT THE CASE! - We are happy to take requests on the night, this requests form is if you have a specific couple of songs you personally would like on the night.
+	<br><br>
+	Don't feel the need to do our job for us! - Leave us to plan the music for you!	
+	<br><br>
+        Cheers,<br>
+        Dan
+    </p>
+    <button onclick="copyToClipboard()">Copy to Clipboard</button>
+    <br><br>
+    <a href="index.html"><button>Go to Index</button></a>
+    <div id="date-box"></div>
+
+    <script>
+        function editPlaceholder(element) {
+            let newText = prompt('Enter the new text:', '');
+            if (newText !== null) {
+                element.innerText = newText;
+            }
+        }
+
+        function copyToClipboard() {
+            const range = document.createRange();
+            range.selectNode(document.getElementById('template'));
+            window.getSelection().removeAllRanges(); 
+            window.getSelection().addRange(range);
+            
+            try {
+                document.execCommand('copy');
+                alert('Template copied to clipboard!');
+            } catch (err) {
+                alert('Failed to copy template.');
+            }
+            
+            window.getSelection().removeAllRanges(); 
+        }
+
+        function getDateIn7Days() {
+            const today = new Date();
+            today.setDate(today.getDate() + 7);
+            const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+            return today.toLocaleDateString(undefined, options);
+        }
+
+        // Display the date 7 days from today
+        document.getElementById('date-box').innerText = 'The date 7 days from today is: ' + getDateIn7Days();
+    </script>
+</body>
+</html>

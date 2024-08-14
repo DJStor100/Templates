@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show Types</title>
+    <style>
+        .placeholder {
+            color: blue;
+            cursor: pointer;
+            border-bottom: 1px dotted blue;
+        }
+        #template {
+            margin-bottom: 20px;
+        }
+        #additional-price {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <h2>Show Types</h2>
+    <p id="template">
+        We have 2 show types suitable for different age groups.
+        <br><br>
+	Our 'Show 1' Package includes a mix of Magic, Games, Puppets, Party Dancing, Balloon Modelling and Music. This show is suitable for Children ages <span class="placeholder" onclick="editPlaceholder(this)">4-7</span>.
+	<br><br>
+	Our 'Show 2' Package is our older show and is a mix of Kids Disco, Kids Karaoke, Party Games, Party Dancing and Balloon Modelling. This show is suitable for Children ages <span class="placeholder" onclick="editPlaceholder(this)">8-12</span>.
+	<br><br>
+	If you have a mixed age party we can combine the 2 shows to create a show with something that everybody will enjoy.
+	<br><br>
+	All of our show packages are based on a 2 hour performance and cost just £<span class="placeholder" onclick="editPlaceholder(this)">140</span> in your area
+    </p>
+    <button onclick="copyToClipboard()">Copy to Clipboard</button>
+    <br><br>
+    <a href="index.html"><button>Go to Index</button></a>
+    <div id="date-box"></div>
+
+    <script>
+        function editPlaceholder(element) {
+            let newText = prompt('Enter the new text:', '');
+            if (newText !== null) {
+                element.innerText = newText;
+            }
+        }
+
+        function copyToClipboard() {
+            const range = document.createRange();
+            range.selectNode(document.getElementById('template'));
+            window.getSelection().removeAllRanges(); 
+            window.getSelection().addRange(range);
+            
+            try {
+                document.execCommand('copy');
+                alert('Template copied to clipboard!');
+            } catch (err) {
+                alert('Failed to copy template.');
+            }
+            
+            window.getSelection().removeAllRanges(); 
+        }
+
+        function getDateIn7Days() {
+            const today = new Date();
+            today.setDate(today.getDate() + 7);
+            const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+            return today.toLocaleDateString(undefined, options);
+        }
+
+        // Display the date 7 days from today
+        document.getElementById('date-box').innerText = 'The date 7 days from today is: ' + getDateIn7Days();
+    </script>
+</body>
+</html>

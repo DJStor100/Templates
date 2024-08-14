@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Easy (Paper Diary + Info Needed)</title>
+    <style>
+        .placeholder {
+            color: blue;
+            cursor: pointer;
+            border-bottom: 1px dotted blue;
+        }
+        #template {
+            margin-bottom: 20px;
+        }
+        #additional-price {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <h2>Booking Easy (Paper Diary + Info Needed)</h2>
+    <p id="template">
+        Booking is nice and easy!<br>
+        There's just a £<span class="placeholder" onclick="editPlaceholder(this)">50</span> Non-Refundable deposit needed to secure the date and time.<br>
+        <br>
+        Once that has been received, I'll get you fully booked in my paper diary and send you a photo of this as confirmation. Then, when you've received that, if you can check that all is correct and if so you'll be booked in!<br>
+        <br>
+	The Remaining balance is just payable <span class="placeholder" onclick="editPlaceholder(this)">in Cash</span>, before the party starts, on the day of the performance.
+	<br>
+	<br>
+        If this sounds okay, please let me know and I'll send over our details for the deposit!<br>
+        <br>
+        I'll first need to know;<br>
+        • <span class="placeholder" onclick="editPlaceholder(this)">[Info]</span><br>
+        • <span class="placeholder" onclick="editPlaceholder(this)">[Info]</span><br>
+        <br>
+        Cheers,<br>
+        Dan
+    </p>
+    <button onclick="copyToClipboard()">Copy to Clipboard</button>
+    <br><br>
+    <a href="index.html"><button>Go to Index</button></a>
+    <div id="date-box"></div>
+
+    <script>
+        function editPlaceholder(element) {
+            let newText = prompt('Enter the new text:', '');
+            if (newText !== null) {
+                element.innerText = newText;
+            }
+        }
+
+        function copyToClipboard() {
+            const range = document.createRange();
+            range.selectNode(document.getElementById('template'));
+            window.getSelection().removeAllRanges(); 
+            window.getSelection().addRange(range);
+            
+            try {
+                document.execCommand('copy');
+                alert('Template copied to clipboard!');
+            } catch (err) {
+                alert('Failed to copy template.');
+            }
+            
+            window.getSelection().removeAllRanges(); 
+        }
+
+        function getDateIn7Days() {
+            const today = new Date();
+            today.setDate(today.getDate() + 7);
+            const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+            return today.toLocaleDateString(undefined, options);
+        }
+
+        // Display the date 7 days from today
+        document.getElementById('date-box').innerText = 'The date 7 days from today is: ' + getDateIn7Days();
+    </script>
+</body>
+</html>

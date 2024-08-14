@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Big Fun Day (Show Only)</title>
+    <style>
+        .placeholder {
+            color: blue;
+            cursor: pointer;
+            border-bottom: 1px dotted blue;
+        }
+        #template {
+            margin-bottom: 20px;
+        }
+        #additional-price {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <h2>Big Fun Day (Show Only)</h2>
+    <p id="template">
+	We have a 'Big Fun Day' Package that may be suitable for you!
+	<br><br>
+	We find this is our most popular package for Public Events, Family Fun Days, Galas, Buisness Promotions, Etc.
+	<br><br>
+	This package includes a mix of Magic, Games, Puppets, Party Dancing, Balloon Modelling and Music.
+	<br><br>
+	We will set up a show which children can sit and watch the Magic, plus join in with the party games and party dancing. The show gets split into 30min-45min segments with Mix and Mingle Balloon Modelling between the show parts.
+	<br><br>
+	For this package we also setup a sound system which we use for the magic show, we play music between shows while balloon modelling. And you are welcome to use this for any announcments during your event!
+	<br><br>
+	Our Family Fun Day packages are priced at just £<span class="placeholder" onclick="editPlaceholder(this)">[Price]</span> in your area based on 2 hours.
+	<br><br>
+	All of our packages can also be extended in time for just £25/h
+        <br>
+        (For Example - A 4 hour Big Fun Day booking would cost just £<span id="additional-amount">([Price]+50)</span> in total)
+	<br> <br>
+	
+    </p>
+    <button onclick="copyToClipboard()">Copy to Clipboard</button>
+    <br><br>
+    <a href="index.html"><button>Go to Index</button></a>
+    <div id="date-box"></div>
+
+    <script>
+        function editPlaceholder(element) {
+            let newText = prompt('Enter the new text:', '');
+            if (newText !== null && !isNaN(newText)) {
+                element.innerText = newText;
+                updateAdditionalAmount(newText);
+            }
+        }
+
+        function updateAdditionalAmount(price) {
+            const additionalAmount = Math.round(parseFloat(price) + 50);
+            document.getElementById('additional-amount').innerText = additionalAmount;
+        }
+
+        function copyToClipboard() {
+            const range = document.createRange();
+            range.selectNode(document.getElementById('template'));
+            window.getSelection().removeAllRanges(); 
+            window.getSelection().addRange(range);
+            
+            try {
+                document.execCommand('copy');
+                alert('Template copied to clipboard!');
+            } catch (err) {
+                alert('Failed to copy template.');
+            }
+            
+            window.getSelection().removeAllRanges(); 
+        }
+
+        function getDateIn7Days() {
+            const today = new Date();
+            today.setDate(today.getDate() + 7);
+            const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+            return today.toLocaleDateString(undefined, options);
+        }
+
+        // Display the date 7 days from today
+        document.getElementById('date-box').innerText = 'The date 7 days from today is: ' + getDateIn7Days();
+    </script>
+</body>
+</html>

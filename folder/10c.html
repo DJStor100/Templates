@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Fee For (Disco + Extra)</title>
+    <style>
+        .placeholder {
+            color: blue;
+            cursor: pointer;
+            border-bottom: 1px dotted blue;
+        }
+        #template {
+            margin-bottom: 20px;
+        }
+        #additional-price {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <h2>The Fee For (Disco + Extra)</h2>
+    <p id="template">
+        The fee for a Disco from 7pm until Midnight in your area is just £<span class="placeholder" onclick="editPlaceholder(this)">[Price]</span> and this will include our Full Sound System, Lighting Setup, DJ plus optional Karaoke at no extra cost!
+        <br><br>
+        This package can be extended in length for just £25/h!
+        <br><br>
+        (For Example; A Booking from <span class="placeholder" onclick="editPlaceholder(this)">[Time]</span> until <span class="placeholder" onclick="editPlaceholder(this)">[Time]</span> would cost just £<span class="placeholder" onclick="editPlaceholder(this)">[Price]</span> in Total)
+    </p>
+    <button onclick="copyToClipboard()">Copy to Clipboard</button>
+    <br><br>
+    <a href="index.html"><button>Go to Index</button></a>
+    <div id="date-box"></div>
+
+    <script>
+        function editPlaceholder(element) {
+            let newText = prompt('Enter the new text:', '');
+            if (newText !== null) {
+                element.innerText = newText;
+                // Update additional amount only if [Price] placeholder was edited
+                if (element.innerText === document.querySelector('.placeholder').innerText) {
+                    updateAdditionalAmount();
+                }
+            }
+        }
+
+        function updateAdditionalAmount() {
+            const priceText = document.querySelectorAll('.placeholder')[0].innerText;
+            const price = parseFloat(priceText);
+            if (!isNaN(price)) {
+                const additionalAmount = Math.round(price + 50);
+                document.getElementById('additional-amount').innerText = additionalAmount;
+            }
+        }
+
+        function copyToClipboard() {
+            const range = document.createRange();
+            range.selectNode(document.getElementById('template'));
+            window.getSelection().removeAllRanges(); 
+            window.getSelection().addRange(range);
+            
+            try {
+                document.execCommand('copy');
+                alert('Template copied to clipboard!');
+            } catch (err) {
+                alert('Failed to copy template.');
+            }
+            
+            window.getSelection().removeAllRanges(); 
+        }
+
+        function getDateIn7Days() {
+            const today = new Date();
+            today.setDate(today.getDate() + 7);
+            const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+            return today.toLocaleDateString(undefined, options);
+        }
+
+        // Display the date 7 days from today
+        document.getElementById('date-box').innerText = 'The date 7 days from today is: ' + getDateIn7Days();
+    </script>
+</body>
+</html>
